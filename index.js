@@ -1,20 +1,37 @@
-import * as Babel from 'babel-standalone';
-import React from 'preact-compat';
+import moduleResolver from '@stevefan1999/babel-plugin-module-resolver'
+import decoratorsLegacy from 'babel-plugin-transform-decorators-legacy'
+import 'preact-compat'
+import 'prop-types'
+import 'react-bootstrap'
+import 'mobx'
+import 'mobx-react'
 
 function init () {
-    const scriptNodes = document.querySelectorAll('script[type="text/es2015"]');
-    const input = [...scriptNodes].reduce((memo, content) => {
-        return memo.concat(';', content.innerHTML);
-    }, '');
-
+    const scriptNodes = document.querySelectorAll('script[type="text/babel-jsx"]')
+	if (scriptNodes.length === 0) {
+	    return;
+	}
+	
+    const input = [...scriptNodes].reduce((memo, content) => memo.concat(';', content.innerHTML), '')
+	
     const options = {
         presets: [
-            'es2015',
+            'latest',
             'react',
-            'stage-0'
+            'stage-2'
         ],
         plugins: [
-            'transform-object-assign'
+            'transform-object-assign',
+			'transform-object-rest-spread',
+			[moduleResolver, {
+				"root": ["."],
+				"alias": {
+					"react": "preact-compat",
+					"react-dom": "preact-compat",
+					"create-react-class": "preact-compat/lib/create-react-class"
+				}
+			}],
+			decoratorsLegacy
         ]
     };
     const output = Babel.transform(input, options).code;
@@ -25,5 +42,4 @@ function init () {
 
 document.addEventListener('DOMContentLoaded', init, false);
 
-global.React = React
-global.ReactDOM = React
+global.require = require // import support

@@ -2,33 +2,67 @@
 <html>
 <head>
     <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>React Quick Prototyping</title>
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css">
 </head>
 <body>
     <div id="root"></div>
   
+	<!--[if lt IE 9]>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/console-polyfill/0.3.0/index.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.10/es5-shim.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.10/es5-sham.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js"></script>
+	<![endif]-->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+	<script>
+		window.__SERVER_STATE__ = {
+			"hello": "world"
+		}
+	</script>
+	
     <script src="./btib.js"></script>
-    <script type="text/es2015">	
-		class App extends React.Component {
-			constructor () {
-				this.state = {
-					
-				}
-			}
-		
+	
+    <script type="text/babel-jsx">
+		import React, { Component } from 'react'
+		import { render } from 'react-dom'
+		import { Button } from 'react-bootstrap'
+		import { observer } from 'mobx-react'
+		import { observable } from 'mobx'
+	
+		@observer
+		class App extends Component {
+			@observable msg = 'Hello World'
+			@observable time = 0
+			
 			componentDidMount () {
 				console.log('hello world')
-				setTimeout(() => {
-				}, 5000)
+				setInterval(() => {
+					this.time++
+				}, 1000)
 			}
 		
 			render() {
-				return (<h1>Hello World</h1>)
+				return (<div>
+					<Button bsStyle="primary" onClick={(e) => this.msg = this.props.hello}>Default</Button>
+					<h1>{this.msg}</h1>
+					<h1>{this.time}</h1>
+				</div>)
 			}
 		}
 
-        ReactDOM.render(
-            <App />,
+        render(
+            <App {...__SERVER_STATE__} />,
             document.getElementById('root')
         );
     </script>
