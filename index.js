@@ -1,4 +1,5 @@
 import * as Babel from 'babel-standalone';
+import React from 'preact-compat';
 
 function init () {
     const scriptNodes = document.querySelectorAll('script[type="text/es2015"]');
@@ -23,3 +24,6 @@ function init () {
 }
 
 document.addEventListener('DOMContentLoaded', init, false);
+
+global.React = React
+global.ReactDOM = React
